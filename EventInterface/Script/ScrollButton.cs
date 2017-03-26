@@ -8,6 +8,10 @@
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Script Overview: 
+ * This is how to make IPointerDownHandler,
+ * IPointerUpHandler and IPointerClickHandler
+ * to complete UGUI Example that
+ * use button to control scroll bar.
 /* * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using UnityEngine;
@@ -15,8 +19,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ScrollButton : MonoBehaviour,
-    IPointerDownHandler,IPointerUpHandler,IPointerClickHandler
-    {
+    IPointerDownHandler,IPointerUpHandler, IPointerClickHandler
+{
 
     public enum DirectionType
     {
@@ -49,37 +53,35 @@ public class ScrollButton : MonoBehaviour,
 
     public Scrollbar TargetScrollBar;
 
-    [Range(0f, 1f)]
-    public float Speed;
+    //Click type - Long
+    [Range(0f, 1f)] public float Speed;
     private float progress = 0f;
 
-    void ChangeBarValueByBtn()
+    //Click type - Once
+    public float ScrollViewHeight;
+    public float ContentHeight;
+    private float progressLength { get { return ContentHeight - ScrollViewHeight; } }
+
+    enum ClickType
+    {
+        Once,
+        Long
+    }
+
+    void ChangeBarValueByBtn(ClickType clickType)
     {
         progress = TargetScrollBar.value;
-        progress += Speed * dir * Time.deltaTime;
+
+        if (clickType == ClickType.Long)
+            progress += Speed * dir * Time.deltaTime;
+        else if (clickType == ClickType.Once)
+            progress += ScrollViewHeight / progressLength * dir;
+
         progress = Mathf.Clamp01(progress);
         TargetScrollBar.value = progress;
     }
 
     private bool isDown = false;
-    private float lastDownTime;
-    [Range(0f, 1f)]
-    public float DelayTime;
-
-	void Update () 
-	{
-        if (isDown)
-        {
-            if (Time.time - lastDownTime > DelayTime)
-            {
-                ChangeBarValueByBtn();
-            }
-        }
-        else
-        {
-            lastDownTime = Time.time;
-        }
-	}
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -91,8 +93,29 @@ public class ScrollButton : MonoBehaviour,
         isDown = false;
     }
 
+    private float lastUpBtnTime = 0f;
+    [Range(0f, 1f)] public float DelayTime;
+
     public void OnPointerClick(PointerEventData eventData)
     {
-        ChangeBarValueByBtn();
+        if (Time.time - lastUpBtnTime <= DelayTime)
+        {
+            ChangeBarValueByBtn(ClickType.Once);
+        }
     }
+
+    void Update()
+    {
+        if (isDown)
+        {
+            if (Time.time - lastUpBtnTime > DelayTime)
+            {
+                ChangeBarValueByBtn(ClickType.Long);
+            }
+        }
+        else
+        {
+            lastUpBtnTime = Time.time;
+        }
+    }   
 }
