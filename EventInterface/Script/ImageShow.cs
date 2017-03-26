@@ -15,7 +15,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class UIInfo : MonoBehaviour,
+public class ImageShow : MonoBehaviour,
     IPointerEnterHandler,IPointerExitHandler{
 
     public Text TextContent;

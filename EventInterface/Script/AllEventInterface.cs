@@ -13,7 +13,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class _EventSystems : MonoBehaviour,
+public class AllEventInterface : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler,
     IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
