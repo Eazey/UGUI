@@ -13,8 +13,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System.Collections;
-using System;
 
 public class ScrollButton : MonoBehaviour,
     IPointerDownHandler,IPointerUpHandler,IPointerClickHandler
@@ -55,25 +53,26 @@ public class ScrollButton : MonoBehaviour,
     public float Speed;
     private float progress = 0f;
 
-    void ChangeBarValueByBtn(int dir)
+    void ChangeBarValueByBtn()
     {
         progress = TargetScrollBar.value;
-        progress += Speed * dir;
+        progress += Speed * dir * Time.deltaTime;
         progress = Mathf.Clamp01(progress);
         TargetScrollBar.value = progress;
     }
 
     private bool isDown = false;
     private float lastDownTime;
+    [Range(0f, 1f)]
     public float DelayTime;
 
 	void Update () 
 	{
         if (isDown)
         {
-            if (lastDownTime - Time.time > DelayTime)
+            if (Time.time - lastDownTime > DelayTime)
             {
-
+                ChangeBarValueByBtn();
             }
         }
         else
@@ -84,16 +83,16 @@ public class ScrollButton : MonoBehaviour,
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        throw new NotImplementedException();
+        isDown = true;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        throw new NotImplementedException();
+        isDown = false;
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        throw new NotImplementedException();
+        ChangeBarValueByBtn();
     }
 }
