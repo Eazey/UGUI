@@ -8,6 +8,7 @@
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Script Overview: 
+ * The script target is that realize effect of drag image.
 /* * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using UnityEngine;

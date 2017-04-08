@@ -8,6 +8,8 @@
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Script Overview: 
+ * The script target is change the image after it had 
+ * dropped.
 /* * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using UnityEngine;
